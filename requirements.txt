@@ -1,0 +1,17 @@
+# Core dependencies (solo lo esencial)
+pdfplumber>=0.10.0
+pypdf>=4.0.0
+click>=8.1.0
+rich>=13.7.0
+python-dotenv>=1.0.0
+
+# MarkItDown sin extras para evitar conflictos
+markitdown>=0.1.0
+
+# Opcional para mejor procesamiento (instalar solo si se necesita)
+pikepdf>=8.0.0
+
+# Desarrollo
+pytest>=8.0.0
+black>=24.0.0
+ruff>=0.1.0
