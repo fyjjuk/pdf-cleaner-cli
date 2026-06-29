@@ -24,7 +24,6 @@ config/local.yaml
 output/
 test_output/
 *.jsonl
-*.md
 *.log
 *.tmp
 *.temp
