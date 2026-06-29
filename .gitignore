@@ -1,36 +1,75 @@
-# Python
+# Entornos virtuales
+venv/
+.venv/
+env/
+.env/
+
+# Archivos de Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
 *.so
 *.egg
 *.egg-info/
 dist/
 build/
-*.whl
 
-# Virtual Environment
-venv/
-.env
-.venv
+# Archivos de configuración (con datos sensibles)
+.env.local
+config/local.yaml
 
-# IDE
+# Archivos de salida y datos generados - EXCLUIR TODO
+output/
+test_output/
+*.jsonl
+*.md
+*.log
+*.tmp
+*.temp
+*.wav
+*.mp3
+*.csv
+*.parquet
+
+# Archivos de pruebas
+.pytest_cache/
+.coverage
+htmlcov/
+tests/__pycache__/
+
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Project specific
-output/
-data/
-*.pdf
-*.md
-*.txt
-logs/
-*.log
-
-# OS
+# Sistema
 .DS_Store
 Thumbs.db
+
+# Repomix (archivos de salida)
+repomix-output.xml
+repomix-full.xml
+ferdonan-*.md
+ferdonan_export.txt
+repomix-*.xml
+
+# Archivos de caché de uv
+uv.lock
+
+# Directorios de datos grandes
+*.pdf
+*.epub
+*.mobi
+*.docx
+
+# Bases de datos vectoriales
+chroma_db/
+*.db
+*.sqlite
+*.sqlite3
+
+# Archivos de Ollama
+.ollama/
+ollama_models/

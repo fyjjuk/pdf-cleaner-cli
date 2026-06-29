@@ -1,17 +1,26 @@
-# Core dependencies (solo lo esencial)
-pdfplumber>=0.10.0
-pypdf>=4.0.0
+# Core
 click>=8.1.0
 rich>=13.7.0
 python-dotenv>=1.0.0
+pydantic>=2.6.0
 
-# MarkItDown sin extras para evitar conflictos
+# PDF extractors
 markitdown>=0.1.0
+pdfplumber>=0.10.0
+pypdf>=4.0.0
+docling>=2.0.0
 
-# Opcional para mejor procesamiento (instalar solo si se necesita)
+# OCR
+pytesseract>=0.3.0
+pdf2image>=1.17.0
+
+# AI local (Ollama)
+ollama>=0.4.0
+
+# Optional for better performance
 pikepdf>=8.0.0
 
-# Desarrollo
+# Development
 pytest>=8.0.0
 black>=24.0.0
 ruff>=0.1.0
