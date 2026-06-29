@@ -18,6 +18,7 @@ build/
 # Archivos de configuración (con datos sensibles)
 .env.local
 config/local.yaml
+.env
 
 # Archivos de salida y datos generados - EXCLUIR TODO
 output/
@@ -73,3 +74,13 @@ chroma_db/
 # Archivos de Ollama
 .ollama/
 ollama_models/
+
+# Archivos de resultados de batch
+batch_errors.log
+batch_report.json
+
+# Archivos de progreso
+batch_progress.jsonl
+*_chunks.jsonl
+*_chunks.json
+*_raw.md
