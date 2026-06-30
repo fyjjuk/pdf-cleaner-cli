@@ -10,6 +10,8 @@ from src.chunker.base import RagChunk
 class JSONPorter(BasePorter):
     """Export enriched RagChunks to JSONL (default) or JSON."""
     
+    identifier = "jsonl"
+    
     def __init__(self, lines: bool = True, indent: int = 2):
         """Initialize JSONPorter.
         Args:
@@ -38,8 +40,12 @@ class JSONPorter(BasePorter):
             else:
                 return json.dumps(data, ensure_ascii=False, indent=self.indent)
         
-        # Write to file
+        # Add extension if not present (append, don't replace)
         output_path = Path(file)
+        ext = ".jsonl" if self.lines else ".json"
+        if not output_path.suffix:
+            output_path = Path(str(output_path) + ext)
+        
         output_path.parent.mkdir(parents=True, exist_ok=True)
         
         with open(output_path, 'w', encoding='utf-8') as f:

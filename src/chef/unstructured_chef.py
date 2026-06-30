@@ -7,7 +7,8 @@ from .base import BaseChef, ContentBlock
 class UnstructuredChef(BaseChef):
     """Chef that uses Unstructured.io for PDF extraction with table support."""
     
-    name = "unstructured"
+    identifier = "unstructured"
+    name = "Unstructured"
     
     def __init__(self):
         self._available = None
@@ -42,7 +43,7 @@ class UnstructuredChef(BaseChef):
             
             elements = partition_pdf(
                 filename=str(path),
-                strategy="hi_res",  # Use high resolution for better table extraction
+                strategy="hi_res",
             )
             
             blocks: List[ContentBlock] = []
@@ -51,14 +52,13 @@ class UnstructuredChef(BaseChef):
                 category = str(element.category)
                 text = str(element)
                 
-                # Map category to block kind
                 kind = self._map_category(category)
                 
                 block = ContentBlock(
                     kind=kind,
                     text=text,
-                    page_idx=getattr(element, 'page_number', 0) - 1,  # 1-based to 0-based
-                    bbox=[0, 0, 0, 0],  # Unstructured doesn't always provide bbox
+                    page_idx=getattr(element, 'page_number', 0) - 1,
+                    bbox=[0, 0, 0, 0],
                     title_level=1 if kind == "title" else 0,
                     reading_order=len(blocks),
                     block_index=len(blocks),

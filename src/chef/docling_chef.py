@@ -7,13 +7,18 @@ from .base import BaseChef, ContentBlock
 class DoclingChef(BaseChef):
     """Chef that uses Docling to extract ContentBlocks from PDFs."""
     
+    identifier = "docling"
+    name = "Docling"
+    
     def __init__(self):
+        """Initialize Docling Chef with default settings."""
         self._converter = None
     
     def _ensure_initialized(self):
         """Lazy initialize the Docling converter."""
         if self._converter is None:
             from docling.document_converter import DocumentConverter
+            # Use default settings - no custom pipeline options
             self._converter = DocumentConverter()
     
     def process(self, path: str | Path) -> List[ContentBlock]:
@@ -39,37 +44,28 @@ class DoclingChef(BaseChef):
             return []
     
     def _doc_to_blocks(self, doc) -> List[ContentBlock]:
-        """Convert a DoclingDocument to ContentBlocks.
-        This is a simplified conversion. For full implementation,
-        you would iterate over all items in reading order.
-        """
+        """Convert a DoclingDocument to ContentBlocks."""
         blocks: List[ContentBlock] = []
         reading_order = 0
         
-        # Iterate over document items in reading order
         for item in doc.iterate_items():
-            # Get basic info
             label = str(getattr(item, 'label', 'text')).lower()
             text = getattr(item, 'text', '') or ''
             page_no = getattr(item, 'page_no', 1)
             page_idx = page_no - 1
             
-            # Map Docling label to our kind
             kind = self._map_label(label)
             
-            # Get bounding box if available
             bbox = [0, 0, 0, 0]
             if hasattr(item, 'prov') and item.prov:
                 prov = item.prov[0] if item.prov else None
                 if prov and hasattr(prov, 'bbox'):
                     bbox = self._normalize_bbox(prov.bbox, doc.pages[page_no].size)
             
-            # Get title level for headings
             title_level = 0
             if kind == "title":
                 title_level = getattr(item, 'level', 0) + 1
             
-            # Create ContentBlock
             block = ContentBlock(
                 kind=kind,
                 text=text,
@@ -105,14 +101,12 @@ class DoclingChef(BaseChef):
     def _normalize_bbox(self, bbox, page_size) -> List[int]:
         """Normalize bounding box to [0, 1000] coordinates."""
         try:
-            # Docling uses bottom-left origin, we use top-left
             w = max(page_size.width, 1.0)
             h = max(page_size.height, 1.0)
             
-            # Convert to top-left origin and normalize
             x0 = (bbox.l / w) * 1000
             x1 = (bbox.r / w) * 1000
-            y0 = ((h - bbox.t) / h) * 1000  # Flip y-axis
+            y0 = ((h - bbox.t) / h) * 1000
             y1 = ((h - bbox.b) / h) * 1000
             
             return [int(x0), int(y0), int(x1), int(y1)]

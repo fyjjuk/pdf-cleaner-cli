@@ -1,29 +1,66 @@
-# Entornos virtuales
+# ============================================================
+# REPOMIX - Archivos que DEBEN incluirse
+# ============================================================
+# NOTA: Repomix incluye TODO por defecto. 
+# Para excluir, usar patrones negativos o config de repomix.
+# Los archivos listados aquí NO deben estar en .gitignore 
+# si queremos que Repomix los vea.
+
+# ============================================================
+# ENTORNOS VIRTUALES
+# ============================================================
 venv/
 .venv/
 env/
-.env/
+.env/                          # Directorio .env (no el archivo)
 
-# Archivos de Python
+# ============================================================
+# PYTHON - Código compilado y cachés
+# ============================================================
 __pycache__/
+*.py[cod]
 *.pyc
 *.pyo
 *.pyd
 *.so
 *.egg
 *.egg-info/
+*.egg-info/
 dist/
 build/
+*.pytest_cache/
+*.mypy_cache/
+*.ruff_cache/
+*.coverage
+htmlcov/
+.coverage.*
+coverage.xml
+*.cover
+.pytest_cache/
 
-# Archivos de configuración (con datos sensibles)
+# ============================================================
+# ARCHIVOS DE CONFIGURACIÓN SENSIBLES
+# ============================================================
 .env.local
+.env.*.local
+.env.production
+.env.staging
+.env.development
 config/local.yaml
-.env
+config/*.local.yaml
+*.secret
+*.key
+*.pem
+*.crt
 
-# Archivos de salida y datos generados - EXCLUIR TODO
+# ============================================================
+# DATOS Y OUTPUTS - EXCLUIR TODO
+# ============================================================
 output/
 test_output/
+data/
 *.jsonl
+*.jsonl.tmp
 *.log
 *.tmp
 *.temp
@@ -31,55 +68,130 @@ test_output/
 *.mp3
 *.csv
 *.parquet
+*.xlsx
+*.xls
 
-# Archivos de pruebas
-.pytest_cache/
-.coverage
-htmlcov/
-tests/__pycache__/
-
-# IDEs
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Sistema
-.DS_Store
-Thumbs.db
-
-# Repomix (archivos de salida)
-repomix-output.xml
-repomix-full.xml
-ferdonan-*.md
-ferdonan_export.txt
-repomix-*.xml
-
-# Archivos de caché de uv
-uv.lock
-
-# Directorios de datos grandes
+# ============================================================
+# DOCUMENTOS BINARIOS Y GRANDES
+# ============================================================
 *.pdf
 *.epub
 *.mobi
 *.docx
+*.pptx
+*.xlsx
+*.zip
+*.tar.gz
+*.tgz
+*.rar
+*.7z
+*.iso
+*.img
 
-# Bases de datos vectoriales
+# ============================================================
+# BASES DE DATOS VECTORIALES
+# ============================================================
 chroma_db/
+chromadb/
+qdrant/
+weaviate/
+pinecone/
 *.db
 *.sqlite
 *.sqlite3
+*.duckdb
 
-# Archivos de Ollama
+# ============================================================
+# IDEs Y EDITORES
+# ============================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+*.rej
+*.patch
+
+# ============================================================
+# SISTEMA OPERATIVO
+# ============================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ============================================================
+# REPOMIX - ARCHIVOS GENERADOS POR REPOMIX
+# ============================================================
+repomix-output.xml
+repomix-full.xml
+repomix-*.xml
+ferdonan-*.md
+ferdonan_export.txt
+repomix-*.json
+repomix-*.yaml
+
+# ============================================================
+# OLLAMA Y MODELOS LOCALES
+# ============================================================
 .ollama/
 ollama_models/
+models/
+*.gguf
+*.bin
+*.safetensors
 
-# Archivos de resultados de batch
+# ============================================================
+# CACHÉ DE DEPENDENCIAS
+# ============================================================
+uv.lock
+poetry.lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+Cargo.lock
+go.sum
+
+# ============================================================
+# ARCHIVOS DE BATCH Y PROGRESO
+# ============================================================
 batch_errors.log
 batch_report.json
-
-# Archivos de progreso
 batch_progress.jsonl
 *_chunks.jsonl
 *_chunks.json
 *_raw.md
+*_markdown.md
+*.obsidian/
+.trash/
+
+# ============================================================
+# ARCHIVOS DE PRUEBAS Y EJEMPLOS
+# ============================================================
+samples/
+examples/
+test_*.py
+*_test.py
+tests/__pycache__/
+test_output/
+
+# ============================================================
+# ARCHIVOS DE DOCUMENTACIÓN GENERADA
+# ============================================================
+docs/_build/
+docs/api/
+site/
+*.html
+*.xml
+*.jsonl
+
+# ============================================================
+# DEPURACIÓN Y PERFILADO
+# ============================================================
+*.prof
+*.lprof
+*.perf
+*.flamegraph
+*.svg

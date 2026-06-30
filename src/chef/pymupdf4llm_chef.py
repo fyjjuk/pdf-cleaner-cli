@@ -7,7 +7,8 @@ from .base import BaseChef, ContentBlock
 class PyMuPDF4LLMChef(BaseChef):
     """Chef that uses PyMuPDF4LLM for fast PDF extraction."""
     
-    name = "pymupdf4llm"
+    identifier = "pymupdf4llm"
+    name = "PyMuPDF4LLM"
     
     def __init__(self):
         self._available = None
@@ -40,13 +41,11 @@ class PyMuPDF4LLMChef(BaseChef):
         try:
             import pymupdf4llm
             
-            # Convert to markdown
             markdown = pymupdf4llm.to_markdown(str(path))
             
             if not markdown:
                 return []
             
-            # Convert markdown to blocks
             blocks = self._markdown_to_blocks(markdown)
             return blocks
         except Exception as e:
@@ -66,7 +65,6 @@ class PyMuPDF4LLMChef(BaseChef):
             stripped = line.strip()
             
             if stripped.startswith('#'):
-                # Flush previous text
                 if current_text.strip():
                     block = ContentBlock(
                         kind="text",
@@ -80,7 +78,6 @@ class PyMuPDF4LLMChef(BaseChef):
                     blocks.append(block)
                     current_text = ""
                 
-                # Extract heading
                 level = len(stripped.split()[0])
                 title = ' '.join(stripped.split()[1:])
                 current_title = title
@@ -99,7 +96,6 @@ class PyMuPDF4LLMChef(BaseChef):
             else:
                 current_text += line + "\n"
         
-        # Flush remaining text
         if current_text.strip():
             block = ContentBlock(
                 kind="text",

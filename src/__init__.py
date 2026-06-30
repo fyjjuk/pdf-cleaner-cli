@@ -7,7 +7,7 @@ from .refinery import BaseRefinery
 from .porter import BasePorter
 from .fetcher import BaseFetcher, FetchedDocument
 from .genie import BaseGenie
-from .pipeline import Pipeline, BatchProcessor
+from .core.pipeline import DynamicPipeline
 
 __all__ = [
     "__version__",
@@ -17,5 +17,5 @@ __all__ = [
     "BasePorter",
     "BaseFetcher", "FetchedDocument",
     "BaseGenie",
-    "Pipeline", "BatchProcessor",
+    "DynamicPipeline",
 ]

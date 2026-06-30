@@ -7,7 +7,8 @@ from .base import BaseChef, ContentBlock
 class PDFPlumberChef(BaseChef):
     """Chef that uses PDFPlumber to extract ContentBlocks from PDFs."""
     
-    name = "pdfplumber"
+    identifier = "pdfplumber"
+    name = "PDFPlumber"
     
     def process(self, path: str | Path) -> List[ContentBlock]:
         """Extract ContentBlocks from a PDF using PDFPlumber.

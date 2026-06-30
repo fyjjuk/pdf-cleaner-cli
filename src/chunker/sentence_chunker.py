@@ -7,12 +7,16 @@ from .base import BaseChunker, ContentBlock, RagChunk
 class SentenceChunker(BaseChunker):
     """Split text while preserving complete sentences."""
     
+    identifier = "sentence"
+    name = "Sentence Chunker"
+    
     def __init__(
         self,
         chunk_size: int = 512,
         overlap: int = 64,
         min_sentences: int = 1,
         min_chars: int = 12,
+        min_words: int = 50,  # Added for API compatibility
     ):
         """Initialize SentenceChunker.
         Args:
@@ -20,11 +24,13 @@ class SentenceChunker(BaseChunker):
             overlap: Overlap tokens between chunks.
             min_sentences: Minimum sentences per chunk.
             min_chars: Minimum characters to keep a sentence.
+            min_words: Minimum words to include a chunk (for API compatibility).
         """
         self.chunk_size = chunk_size
         self.overlap = min(overlap, chunk_size // 2)
         self.min_sentences = min_sentences
         self.min_chars = min_chars
+        self.min_words = min_words  # Stored but not used in this chunker
     
     def chunk(self, blocks: List[ContentBlock], source: str) -> List[RagChunk]:
         """Chunk text by sentences."""

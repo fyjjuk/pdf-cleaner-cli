@@ -1,9 +1,12 @@
 """ContextualRefinery - Adds hierarchical context to chunks."""
+
 from typing import List, Optional
 
 from .base import BaseRefinery
 from src.chunker.base import RagChunk
-from src.utils.ollama import query_ollama
+from src.services.llm_service import LLMService
+from src.services.prompts import LLMPromptTemplates
+
 
 class ContextualRefinery(BaseRefinery):
     """Add hierarchical context and optional summaries to chunks."""
@@ -16,6 +19,7 @@ class ContextualRefinery(BaseRefinery):
         """
         self.model = model
         self.generate_summary = generate_summary
+        self.llm = LLMService.get_instance()
     
     def enrich(self, chunks: List[RagChunk]) -> List[RagChunk]:
         """Add contextual info to chunks."""
@@ -25,9 +29,15 @@ class ContextualRefinery(BaseRefinery):
                 chunk.chunk_context = f"[{chunk.title_path}]"
             
             # Optionally generate summary
-            if self.generate_summary and chunk.token_count > 100:
-                prompt = f"Genera un resumen breve (1-2 frases) del siguiente texto:\n\n{chunk.page_content}"
-                summary = query_ollama(prompt, model=self.model)
+            if self.generate_summary and chunk.token_count > 100 and not chunk.doc_summary:
+                prompt = LLMPromptTemplates.summarize(chunk.page_content, language="spanish")
+                
+                summary = self.llm.generate(
+                    prompt=prompt,
+                    model=self.model,
+                    max_tokens=150,
+                    temperature=0.3
+                )
                 if summary:
                     chunk.doc_summary = summary
         

@@ -16,9 +16,6 @@ unstructured[pdf]>=0.15.0
 pytesseract>=0.3.0
 pdf2image>=1.17.0
 
-# Chunking (Chonkie)
-chonkie>=1.0.0
-
 # AI local (Ollama)
 ollama>=0.4.0
 

@@ -7,7 +7,8 @@ from .base import BaseChef, ContentBlock
 class MarkItDownChef(BaseChef):
     """Chef that uses MarkItDown to extract ContentBlocks from PDFs."""
     
-    name = "markitdown"
+    identifier = "markitdown"
+    name = "MarkItDown"
     
     def __init__(self):
         self._converter = None
@@ -38,7 +39,6 @@ class MarkItDownChef(BaseChef):
             if not markdown:
                 return []
             
-            # Convert markdown to ContentBlocks
             blocks = self._markdown_to_blocks(markdown)
             return blocks
         except Exception as e:
@@ -46,22 +46,17 @@ class MarkItDownChef(BaseChef):
             return []
     
     def _markdown_to_blocks(self, markdown: str) -> List[ContentBlock]:
-        """Convert markdown text to ContentBlocks.
-        This is a simplified conversion that splits by headings.
-        """
+        """Convert markdown text to ContentBlocks."""
         blocks: List[ContentBlock] = []
         lines = markdown.split('\n')
         
         current_text = ""
-        current_title = ""
         current_title_level = 0
         
         for i, line in enumerate(lines):
             stripped = line.strip()
             
-            # Check if line is a heading
             if stripped.startswith('#'):
-                # Flush previous text block
                 if current_text.strip():
                     block = ContentBlock(
                         kind="text",
@@ -75,13 +70,10 @@ class MarkItDownChef(BaseChef):
                     blocks.append(block)
                     current_text = ""
                 
-                # Extract heading level and text
-                level = len(stripped.split()[0])  # Number of #
+                level = len(stripped.split()[0])
                 title = ' '.join(stripped.split()[1:])
-                current_title = title
                 current_title_level = min(level, 6)
                 
-                # Add title block
                 block = ContentBlock(
                     kind="title",
                     text=title,
@@ -95,7 +87,6 @@ class MarkItDownChef(BaseChef):
             else:
                 current_text += line + "\n"
         
-        # Flush remaining text
         if current_text.strip():
             block = ContentBlock(
                 kind="text",

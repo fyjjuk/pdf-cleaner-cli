@@ -7,7 +7,8 @@ from .base import BaseChef, ContentBlock
 class PyTesseractChef(BaseChef):
     """Chef that uses Tesseract OCR for scanned PDFs."""
     
-    name = "tesseract"
+    identifier = "tesseract"
+    name = "Tesseract OCR"
     
     def __init__(self):
         self._available = None
@@ -48,11 +49,9 @@ class PyTesseractChef(BaseChef):
             
             blocks: List[ContentBlock] = []
             
-            # Convert PDF to images
             images = convert_from_path(str(path), dpi=200)
             
             for page_idx, image in enumerate(images):
-                # OCR the image
                 text = pytesseract.image_to_string(image, lang='spa+eng')
                 
                 if text and text.strip():
