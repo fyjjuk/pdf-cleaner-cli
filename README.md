@@ -6,132 +6,101 @@
 
 ## ✨ Features
 
-- 6+ Extractors: Docling, MarkItDown, PDFPlumber, PyMuPDF4LLM, Unstructured, Tesseract OCR
-- 3 Chunking Strategies: Heading-based, Token-based, Sentence-based
-- 4 Refineries: Token counting, Contextualization, Summarization, Deduplication
-- AI Integration: Ollama and OpenAI support for summaries and contextualization
-- Pipeline Architecture: Modular CHOMP pipeline (Chef → Chunker → Refinery → Porter)
-- Batch Processing: Process multiple PDFs in parallel
-- Multiple Output Formats: JSONL, JSON
-- Rich CLI: Beautiful terminal UI with progress bars and tables
-
----
-
-## 📦 Installation
-
-git clone https://github.com/yourusername/pdf-sanitizer.git
-cd pdf-sanitizer
-
-python -m venv .venv
-source .venv/bin/activate
-
-pip install -r requirements.txt
-
-### Optional: Install Tesseract for OCR
-
-sudo apt install tesseract-ocr tesseract-ocr-spa
+- **6+ Extractors**: Docling, MarkItDown, PDFPlumber, PyMuPDF4LLM, Unstructured, Tesseract OCR
+- **6 Chunking Strategies** (E1–E6):
+  - E1 – Fixed Size
+  - E2 – Fixed Size + Overlap
+  - E3 – Sentence-based
+  - E4 – Recursive Character
+  - E5 – Semantic (LLM-based)
+  - E6 – Hybrid
+- **Perfiles específicos**: D&D, Académico, Automático, Genérico
+- **IA Integrada**: Ollama y OpenAI para resúmenes, contexto y metadata
+- **Pipeline Modular**: Chef → Chunker → Refinery → Porter
+- **Batch Processing**: Procesamiento en paralelo con workers
+- **Múltiples formatos de salida**: JSONL, JSON, Markdown con metadata
+- **CLI Rico**: Comandos process, batch, status, config
 
 ---
 
 ## 🚀 Quick Start
 
-### Process a single PDF
+### Instalación
 
-python run.py process document.pdf --extractor docling
+git clone https://github.com/fyjjuk/pdf-sanitizer.git
+cd pdf-sanitizer
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 
-### Process with AI features
+### Procesar un PDF con estrategia específica
 
-python run.py process document.pdf --extractor docling --contextualize --summarize --model qwen2.5:1.5b
+python run.py process documento.pdf --chunker token --chunk-size 512
 
-### Process a batch of PDFs
+python run.py process documento.pdf --chunker sentence
 
-python run.py process ./pdfs/ --extractor docling --output ./output --workers 4
+python run.py process documento.pdf --chunker semantic --model qwen2.5:1.5b
 
-### Check status
+### Usar un perfil predefinido
 
-python run.py status
+python run.py process documento.pdf --profile dnd
 
----
+python run.py process documento.pdf --profile academic
 
-## 📚 CLI Commands
+python run.py process documento.pdf --profile auto
 
-### process - Process a single PDF
+### Batch processing
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| --extractor | Extractor to use | docling |
-| --semantic/--no-semantic | Use heading-based chunking | True |
-| --chunk-size | Words per chunk | 500 |
-| --overlap | Overlap words between chunks | 50 |
-| --min-words | Minimum words per chunk | 200 |
-| --contextualize | Add hierarchical context | False |
-| --summarize | Generate AI summaries | False |
-| --model | Ollama model | qwen2.5:1.5b |
-| --format | Output format (jsonl, json) | jsonl |
-
-### status - Show dependency status
-
-python run.py status
-
-### config - Show current configuration
-
-python run.py config
+python run.py batch ./carpeta_con_pdfs/ --workers 4 --format both
 
 ---
 
-## 🏗️ Architecture (CHOMP)
+## 🏗️ Architecture
 
-CHOMP Pipeline
-
-Chef → Chunker → Refinery → Porter
- ↓        ↓           ↓          ↓
-Extractors | Chunking | Enrichment | Export
-- Docling | • Heading | • Token count | • JSONL
-- MarkItDown | • Token | • Context | • JSON
-- PDFPlumber | • Sentence | • Summary |
-- PyMuPDF4LLM | | • Deduplication |
-- Unstructured |
-- Tesseract (OCR)
-
-### Components
-
-| Component | Description | Examples |
-|-----------|-------------|----------|
-| Chef | Extracts structured content from PDFs | Docling, MarkItDown, PDFPlumber |
-| Chunker | Splits content into semantic chunks | Heading, Token, Sentence |
-| Refinery | Enriches chunks with metadata | Token count, Context, Summaries |
-| Porter | Exports chunks to desired format | JSONL, JSON |
-
----
-
-## 🔧 Configuration
-
-Create a .env file:
-
-OUTPUT_DIR=./output
-
-DEFAULT_EXTRACTOR=docling
-
-CHUNK_SIZE=500
-CHUNK_OVERLAP=50
-MIN_WORDS=200
-
-OLLAMA_MODEL=qwen2.5:1.5b
-
-OUTPUT_FORMAT=jsonl
+PDF Entrada
+    │
+    ▼
+👨‍🍳 CHEF (Extractores)
+    │ Docling, MarkItDown, PDFPlumber, PyMuPDF4LLM, Unstructured, Tesseract
+    │
+    ▼
+✂️ CHUNKER (6 Estrategias)
+    │ E1 FixedSize, E2 FixedSize+Overlap, E3 Sentence, E4 Recursive, E5 Semantic, E6 Hybrid
+    │
+    ▼
+🔬 REFINERY (Enriquecimiento)
+    │ Token count, Context, Summaries, D&D metadata, Header detection, Standardization
+    │
+    ▼
+📦 PORTER (Exportación)
+    │ JSONL, JSON, Markdown con metadatos
+    │
+    ▼
+💾 Salida estructurada
 
 ---
 
-## 🧪 Extractors Comparison
+## 📚 Estrategias de Chunking (E1–E6)
 
-| Extractor | Speed | Quality | OCR | Tables | Dependencies |
-|-----------|-------|---------|-----|--------|--------------|
-| Docling | Medium | ⭐⭐⭐⭐⭐ | ✅ | ✅ | docling |
-| MarkItDown | Medium | ⭐⭐⭐⭐ | ❌ | ✅ | markitdown |
-| PDFPlumber | Fast | ⭐⭐⭐ | ❌ | ✅ | pdfplumber |
-| PyMuPDF4LLM | Fast | ⭐⭐⭐⭐ | ❌ | ✅ | pymupdf4llm |
-| Unstructured | Medium | ⭐⭐⭐⭐ | ✅ | ✅ | unstructured |
-| Tesseract | Slow | ⭐⭐⭐ | ✅ | ❌ | pytesseract |
+| Estrategia | Clase | Descripción |
+|-----------|-------|-------------|
+| E1 | FixedSizeChunker | Divide en fragmentos de tamaño fijo (tokens/palabras) |
+| E2 | FixedSizeOverlapChunker | Tamaño fijo con solapamiento entre fragmentos |
+| E3 | SentenceChunker | Respeta límites de oraciones completas |
+| E4 | RecursiveChunker | Divide jerárquicamente: párrafos → líneas → oraciones → caracteres |
+| E5 | SemanticChunker | Usa embeddings/LLM para detectar cambios de tema |
+| E6 | HybridChunker | Combina múltiples estrategias (estructural + recursivo + semántico) |
+
+---
+
+## 📂 Perfiles
+
+| Perfil | Uso | Características |
+|--------|-----|-----------------|
+| dnd | D&D 5e rulebooks, adventures | Detección de hechizos, monstruos, clases, facciones |
+| academic | Papers, tesis, artículos | Estructura IMRAD, referencias, resúmenes |
+| auto | Detección automática | Analiza el contenido y elige el mejor perfil |
+| generic | Fallback | Configuración ligera sin LLM |
 
 ---
 
@@ -139,36 +108,78 @@ OUTPUT_FORMAT=jsonl
 
 ### JSONL (default)
 
-{"page_content": "Text chunk...", "source": "document.pdf", "kind": "text", "title_path": "Section > Subsection", "chunk_index": 0, "token_count": 123, "content_hash": "abc123..."}
+{"page_content": "Texto del chunk...", "source": "doc.pdf", "title_path": "Sección > Subsección", "chunk_index": 0, "token_count": 123, "content_hash": "abc123...", "extras": {...}}
 
-### JSON
+### Markdown
 
-[
-  {"page_content": "Text chunk...", "source": "document.pdf", ...},
-  {"page_content": "Next chunk...", "source": "document.pdf", ...}
-]
+---
+title: Documento
+source: doc.pdf
+total_chunks: 12
+keywords: IA, RAG, embeddings
+---
+
+# Título
+
+## 1. Sección
+
+Type: rule | Keywords: keyword1, keyword2
+
+Contenido del chunk...
+
+---
+
+## ⚙️ Configuración
+
+Copia .env.example a .env y ajusta:
+
+DEFAULT_EXTRACTOR=pymupdf4llm
+
+OLLAMA_MODEL=qwen2.5:1.5b
+
+CHUNK_SIZE=512
+CHUNK_OVERLAP=50
+MIN_WORDS=200
+
+OUTPUT_DIR=./output
+OUTPUT_FORMAT=both
+
+---
+
+## 🧪 Extractors Comparison
+
+| Extractor | Speed | Quality | OCR | Tables |
+|-----------|-------|---------|-----|--------|
+| Docling | ⚡⚡⚡ | ⭐⭐⭐⭐⭐ | ✅ | ✅ |
+| PyMuPDF4LLM | ⚡⚡⚡⚡ | ⭐⭐⭐⭐ | ❌ | ✅ |
+| MarkItDown | ⚡⚡⚡ | ⭐⭐⭐⭐ | ❌ | ✅ |
+| PDFPlumber | ⚡⚡⚡⚡ | ⭐⭐⭐ | ❌ | ✅ |
+| Unstructured | ⚡⚡⚡ | ⭐⭐⭐⭐ | ✅ | ✅ |
+| Tesseract | ⚡ | ⭐⭐⭐ | ✅ | ❌ |
 
 ---
 
 ## 📦 Dependencies
 
-| Feature | Dependencies |
-|---------|--------------|
-| Base | click, rich, python-dotenv, pydantic |
-| Extractors | docling, markitdown, pdfplumber, pymupdf4llm, unstructured |
-| OCR | pytesseract, pdf2image |
-| AI | ollama, openai |
-| Chunking | chonkie |
+Core: click, rich, pydantic, python-dotenv
+
+Extractores: pymupdf4llm, pdfplumber, docling, unstructured, markitdown
+
+OCR: pytesseract, pdf2image
+
+LLM: ollama, openai
+
+Chunking: implementación propia (sin librerías externas)
 
 ---
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests: pytest
-5. Submit a pull request
+1. Fork el repositorio
+2. Crea una rama: git checkout -b feature/nueva-funcionalidad
+3. Commit: git commit -m "feat: descripción"
+4. Push: git push origin feature/nueva-funcionalidad
+5. Abre un Pull Request
 
 ---
 
@@ -178,19 +189,10 @@ MIT
 
 ---
 
-## 🙏 Acknowledgments
-
-- Docling - IBM's document parsing
-- MarkItDown - Microsoft's markdown converter
-- PDFStract - Unified extraction layer
-- openIngestion - CHOMP pipeline
-- Chonkie - Chunking library
-
----
-
 ## 📞 Support
 
-- Issues: GitHub Issues
-- License: MIT
+Issues: GitHub Issues
 
-Made with ❤️ for the RAG community
+Documentación: README.md
+
+Made with ❤️ for the RAG community.
